@@ -1,0 +1,42 @@
+# Synology / Linux deployment using the multi-arch Docker Hub image.
+# Run from the project directory: docker compose -f compose.nas.yaml up -d
+name: luma-web
+services:
+  luma:
+    image: binaryeisley/luma-album:4.2.0
+    user: "${LUMA_UID:-10001}:${LUMA_GID:-10001}"
+    # Add only supplementary groups that already grant photo read access:
+    # group_add:
+    #   - "YOUR_PHOTO_READ_GROUP_ID"
+    restart: unless-stopped
+    ports:
+      - "${LUMA_PORT:-3939}:3939"
+    environment:
+      LUMA_BIND: "0.0.0.0:3939"
+      LUMA_DATA_DIR: /data
+      LUMA_MEDIA_ROOTS: /photos
+      LUMA_WEB_PASSWORD_FILE: /run/secrets/web_password
+      LUMA_PUBLIC_URL: ${LUMA_PUBLIC_URL:-}
+      LUMA_UPDATE_RUNTIME: linux-amd64-v1
+    secrets:
+      - web_password
+    volumes:
+      - ${LUMA_DATA_PATH:-./data}:/data
+      # Separate writable application versions and update files.
+      - ${LUMA_UPDATES_PATH:-./app-updates}:/updates
+      - ${LUMA_PHOTOS_PATH:?Set LUMA_PHOTOS_PATH in .env}:/photos:ro
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+secrets:
+  web_password:
+    file: ./secrets/web-password.txt
