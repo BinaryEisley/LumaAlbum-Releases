@@ -2,9 +2,9 @@
 
 拾光（Luma Album）是一款连接**本地目录 / 共享文件夹、群晖 Synology Photos 与 WebDAV** 的跨端私人相册，采用 **React + Rust 共享核心 + WebAssembly** 构建，同一套界面与媒体引擎同时运行于 Windows 桌面端、Windows Web 服务、群晖 NAS（x86_64 Docker）与 iStoreOS / 香橙派 5 Plus（ARM64 Docker）。
 
-当前发布版本为 **4.3.1**（v4.3）。
+当前发布版本为 **4.3.2**（v4.3）。
 
-[下载 4.3.1 正式版与升级包 (`web-v4.3.1`)](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.1) · [Docker Hub 多架构镜像 (`binaryeisley/luma-album:4.2.0`)](https://hub.docker.com/r/binaryeisley/luma-album) · [版本更新说明](web/RELEASE_NOTES.md) · [Docker 首次部署](web/DEPLOYMENT.md) · [网页在线更新指南](web/APP-UPDATES.md)
+[下载 4.3.2 正式版与升级包 (`web-v4.3.2`)](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) · [Docker Hub 多架构镜像 (`binaryeisley/luma-album:4.2.0`)](https://hub.docker.com/r/binaryeisley/luma-album) · [版本更新说明](web/RELEASE_NOTES.md) · [Docker 首次部署](web/DEPLOYMENT.md) · [网页在线更新指南](web/APP-UPDATES.md)
 
 ---
 
@@ -20,30 +20,32 @@
 
 ## 运行环境与交付产物
 
-| 运行环境 | 运行时标识 | 4.3.1 交付产物 | 说明 |
+| 运行环境 | 运行时标识 | 4.3.2 交付产物 | 说明 |
 | --- | --- | --- | --- |
-| **Windows 桌面端 (x64)** | Tauri / WebView2 | `LumaAlbumReact-4.3.1-windows-x64.exe` | 独立桌面程序（本地构建输出至 `React/Desktop/LumaAlbumReact.exe`） |
-| **Windows Web 端 (x64)** | `windows-amd64-v1` | `web/release/luma-web.exe` / `Luma-Web-4.3.1-windows-amd64-v1.luma` | 内嵌前端的 Windows Web 服务（配合 `web/Start-Web.cmd` 启动），亦支持 `.luma` 自升级 |
-| **群晖 NAS Docker (x86_64)** | `linux-amd64-v1` | `Luma-Web-4.3.1-linux-amd64-v1.luma` | 搭配 `web/compose.nas.yaml`，通过网页端上传 `.luma` 升级 |
-| **iStoreOS / 香橙派 5 Plus (ARM64)** | `linux-arm64-v1` | `Luma-Web-4.3.1-linux-arm64-v1.luma` | 搭配 `web/compose.orangepi5plus.yaml`，通过网页端上传 `.luma` 升级 |
+| **Windows 桌面端 (x64)** | Tauri / WebView2 | `LumaAlbumReact-4.3.2-windows-x64.exe` | 独立桌面程序（支持应用内一键在线更新，本地构建输出至 `React/Desktop/LumaAlbumReact.exe`） |
+| **Windows Web 端 (x64)** | `windows-amd64-v1` | `web/release/luma-web.exe` / `Luma-Web-4.3.2-windows-amd64-v1.luma` | 内嵌前端的 Windows Web 服务（配合 `web/Start-Web.cmd` 启动），支持服务端直连或 `.luma` 升级 |
+| **群晖 NAS Docker (x86_64)** | `linux-amd64-v1` | `Luma-Web-4.3.2-linux-amd64-v1.luma` | 搭配 `web/compose.nas.yaml`，支持网页端一键在线更新或手动上传 `.luma` |
+| **iStoreOS / 香橙派 5 Plus (ARM64)** | `linux-arm64-v1` | `Luma-Web-4.3.2-linux-arm64-v1.luma` | 搭配 `web/compose.orangepi5plus.yaml`，支持网页端一键在线更新或手动上传 `.luma` |
 
 ---
 
 ## 快速开始：部署与网页在线升级
 
-### 1. 已有 4.0.x / 4.1.x / 4.2.x / 4.3.0 环境：通过网页端无损升级至 4.3.1（推荐）
+### 1. 已有 4.0.x / 4.1.x / 4.2.x / 4.3.x 环境：无损升级至 4.3.2（推荐）
 
-日常版本升级无需重新拉取或导入几百 MB 的 Docker 镜像：
+日常版本升级无需重新拉取或导入几百 MB 的 Docker 镜像（`4.3.2` 起支持**一键在线直连更新**，无需经电脑中转）：
 
-1. 从 [`web-v4.3.1` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.1) 下载对应平台的 `.luma` 升级包：
-   - **群晖（Intel / AMD x86_64）**：`Luma-Web-4.3.1-linux-amd64-v1.luma`
-   - **iStoreOS / 香橙派 5 Plus（ARM64）**：`Luma-Web-4.3.1-linux-arm64-v1.luma`
-   - **Windows Web（x64）**：`Luma-Web-4.3.1-windows-amd64-v1.luma`
-2. 登录拾光网页，依次打开 **偏好设置 → 应用更新**。
-3. 选择下载好的 `.luma` 文件，点击 **准备更新**，再点击 **替换并更新**。
-4. 服务自动重启后刷新页面即可（可在 `/health` 或设置页确认版本为 `4.3.1`）。
+- **方式 A（4.3.2 及之后版本推荐：一键在线直连更新）**：打开 **偏好设置 → 应用更新 → 检查更新**，检测到新版本后直接点击 **立即在线更新**，Web 端由服务器直接从 GitHub 拉取并校验 SHA-256 后自动替换重启，Windows 桌面端自动下载校验并重启替换。
+- **方式 B（4.3.1 及更早版本首次升级，或离线内网环境：手动上传 `.luma`）**：
+  1. 从 [`web-v4.3.2` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) 下载对应平台的 `.luma` 升级包：
+     - **群晖（Intel / AMD x86_64）**：`Luma-Web-4.3.2-linux-amd64-v1.luma`
+     - **iStoreOS / 香橙派 5 Plus（ARM64）**：`Luma-Web-4.3.2-linux-arm64-v1.luma`
+     - **Windows Web（x64）**：`Luma-Web-4.3.2-windows-amd64-v1.luma`
+  2. 登录拾光网页，依次打开 **偏好设置 → 应用更新**。
+  3. 选择下载好的 `.luma` 文件，点击 **准备更新**，再点击 **替换并更新**。
+  4. 服务自动重启后刷新页面即可（可在 `/health` 或设置页确认版本为 `4.3.2`）。
 
-> **数据保留说明**：`4.3.1` 升级包采用 `dataPolicy=preserve`，升级时仅替换应用前后端程序文件，**完整保留** `/data` 下已配置的相册源、索引缓存、收藏、轮播方案与保险箱数据；挂载在 `/photos` 的原始照片目录只读独立，不受应用更新影响。
+> **数据保留说明**：`4.3.2` 升级包采用 `dataPolicy=preserve`，升级时仅替换应用前后端程序文件，**完整保留** `/data` 下已配置的相册源、索引缓存、收藏、轮播方案与保险箱数据；挂载在 `/photos` 的原始照片目录只读独立，不受应用更新影响。
 
 ### 2. 全新 Docker 部署（群晖 / iStoreOS / 香橙派）
 
@@ -55,14 +57,27 @@
    docker compose -f compose.nas.yaml up -d            # 群晖 x86_64
    docker compose -f compose.orangepi5plus.yaml up -d  # 香橙派 / ARM64
    ```
-3. 启动后从 [`web-v4.3.1` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.1) 下载对应平台的 `.luma` 升级包，在网页端 **偏好设置 → 应用更新** 一键无损升级至最新版；后续版本迭代均无需重打或重拉 Docker 镜像。
+3. 启动后从 [`web-v4.3.2` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) 下载对应平台的 `.luma` 升级包，在网页端 **偏好设置 → 应用更新** 一键无损升级至 `4.3.2`；升级后即可直接用内置的 **立即在线更新**，后续版本迭代均无需重打或重拉 Docker 镜像。
 
 ### 3. Windows 桌面端与本机 Web 服务运行
 
-- **Windows 桌面端**：从 [`web-v4.3.1` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.1) 下载 `LumaAlbumReact-4.3.1-windows-x64.exe` 直接双击运行（需 Windows 10/11 自带 WebView2 运行时）。
-- **Windows 本机 Web 服务**：构建后双击 `web/Start-Web.cmd` 启动内嵌前端的 `web/release/luma-web.exe`，默认监听本机端口，后续同样支持在网页端上传 `Luma-Web-*-windows-amd64-v1.luma` 自升级。
+- **Windows 桌面端**：从 [`web-v4.3.2` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) 下载 `LumaAlbumReact-4.3.2-windows-x64.exe` 直接双击运行（需 Windows 10/11 自带 WebView2 运行时；后续可直接在 **偏好设置 → 应用更新** 点击「立即在线更新」自动替换重启）。
+- **Windows 本机 Web 服务**：构建后双击 `web/Start-Web.cmd` 启动内嵌前端的 `web/release/luma-web.exe`，默认监听本机端口，后续同样支持在网页端一键在线更新或上传 `Luma-Web-*-windows-amd64-v1.luma` 自升级。
 
-> **v4 更新协议说明**：v4 采用轻量化无签名 `.luma` 包协议，更新流程无需配置公钥/私钥或额外校验版本与架构代号；更新器保留 `LUMAUPD2` 包头、压缩分片边界与安全相对路径校验，防止异常包写出应用目录。首次从 3.x 升至 4.0.1 基线包时使用 `dataPolicy=fresh` 初始化新数据目录，4.0.2 及后续常规升级默认使用 `dataPolicy=preserve`。
+> **v4 更新协议说明**：v4 采用轻量化无签名 `.luma` 包协议，更新流程无需配置公钥/私钥或额外校验版本与架构代号；在线直连更新额外校验官方 `manifest.json` 的 SHA-256 摘要，更新器保留 `LUMAUPD2` 包头、压缩分片边界与安全相对路径校验，防止异常包写出应用目录。首次从 3.x 升至 4.0.1 基线包时使用 `dataPolicy=fresh` 初始化新数据目录，4.0.2 及后续常规升级默认使用 `dataPolicy=preserve`。
+
+---
+
+## 4.3.2 更新重点（2026-11-27）
+
+本次更新上线**全端一键在线直连更新**（不再需要经本机下载上传中转），完整保留全部现有相册与保险箱数据：
+
+- **Web 端服务端直连一键更新（NAS / 香橙派 / 本机 Web）**：
+  - 新增 `POST /api/update/remote` 与实时进度轮询接口：点击 **立即在线更新** 后，由服务器直接从公开分发仓库 `BinaryEisley/LumaAlbum-Releases` 拉取对应架构的 `.luma` 包、校验官方 **SHA-256** 与 `LUMAUPD2` 包结构，自动解包移交既有 `app_update_agent.py` 完成无缝替换、重启与失败自动回滚（后台异步下载避免反代超时，无需改动 Docker 基础镜像），保留手动上传 `.luma` 作为离线兜底。
+- **Windows 桌面端一键自动替换重启**：
+  - 新增桌面端内置在线更新器：点击 **立即在线更新** 自动下载新版 `LumaAlbumReact-*-windows-x64.exe`、校验 **SHA-256** 与 PE 文件头、优雅退出后原子备份替换并自动重启至新版（完整保留 `data/` 目录中的配置与保险箱，只读目录自动提示回退手动下载）。
+- **实时更新进度体验**：
+  - 更新面板实时展示下载进度条、传输字节/百分比与完整阶段状态，关闭再重开偏好设置也能自动续接当前更新进度。
 
 ---
 
