@@ -1,4 +1,14 @@
-# 拾光 4.3.2
+# 拾光 4.3.3
+
+完成两项后端安全加固：修复反向代理 `X-Forwarded-For` 头部伪造绕过登录限流的问题，并以跨平台句柄级安全边界打开全面消除本地媒体读取的 TOCTOU 竞争窗口（保留现有相册与保险箱数据）。
+
+- **反向代理 `X-Forwarded-For` 从右向左剥离可信代理**：遍历全部同名 `X-Forwarded-For` 头按逗号展平后从右向左剥离 `LUMA_TRUSTED_PROXIES` 中的可信代理 IP，取第一个非可信客户端 IP；右侧遇到非法/畸形值时 Fail-Closed 回退为底层 TCP 对端地址，彻底封堵伪造左侧 IP 绕过单 IP 登录限流或占满限流表导致拒绝服务的风险
+- **跨平台 TOCTOU 安全边界文件打开（零二次按路径重开）**：新增 `confined::open_confined_file`——Linux/Unix 基于 `root` 目录句柄逐级 `openat(..., O_NOFOLLOW | O_CLOEXEC)`（末段附加 `O_NONBLOCK` 防止 FIFO 阻塞）原子打开；Windows 使用 `FILE_FLAG_OPEN_REPARSE_POINT` 拒绝末段重解析点并直接对已打开句柄调用 `GetFinalPathNameByHandleW` 核验来源目录边界；媒体流、Live Photo 伴生/嵌入式视频、纯 Rust 缩略图、HEIC/TIFF 解码及 Linux `ffmpeg` 封面帧均直接复用该已校验句柄，消除路径检查与打开之间的竞争窗口
+- 本次升级使用 `dataPolicy=preserve`，完整保留现有已配置的相册连接、索引缓存、收藏、轮播方案与保险箱数据；已在 `4.3.2` 的 Web 与 Windows 桌面端可直接在「偏好设置 → 应用更新」点击「立即在线更新」一键升级
+
+---
+
+## 4.3.2（历史更新）
 
 新增**全端一键在线直连更新**——Web 端由服务器直接从 GitHub 拉取并自动替换重启（不再经本机下载上传中转），Windows 桌面端支持应用内一键下载、SHA-256 校验并自动替换重启（保留现有相册与保险箱数据）。
 

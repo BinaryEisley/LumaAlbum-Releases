@@ -2,9 +2,9 @@
 
 拾光（Luma Album）是一款连接**本地目录 / 共享文件夹、群晖 Synology Photos 与 WebDAV** 的跨端私人相册，采用 **React + Rust 共享核心 + WebAssembly** 构建，同一套界面与媒体引擎同时运行于 Windows 桌面端、Windows Web 服务、群晖 NAS（x86_64 Docker）与 iStoreOS / 香橙派 5 Plus（ARM64 Docker）。
 
-当前发布版本为 **4.3.2**（v4.3）。
+当前发布版本为 **4.3.3**（v4.3）。
 
-[下载 4.3.2 正式版与升级包 (`web-v4.3.2`)](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) · [Docker Hub 多架构镜像 (`binaryeisley/luma-album:4.2.0`)](https://hub.docker.com/r/binaryeisley/luma-album) · [版本更新说明](web/RELEASE_NOTES.md) · [Docker 首次部署](web/DEPLOYMENT.md) · [网页在线更新指南](web/APP-UPDATES.md)
+[下载 4.3.3 正式版与升级包 (`web-v4.3.3`)](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.3) · [Docker Hub 多架构镜像 (`binaryeisley/luma-album:4.2.0`)](https://hub.docker.com/r/binaryeisley/luma-album) · [版本更新说明](web/RELEASE_NOTES.md) · [Docker 首次部署](web/DEPLOYMENT.md) · [网页在线更新指南](web/APP-UPDATES.md)
 
 ---
 
@@ -20,32 +20,32 @@
 
 ## 运行环境与交付产物
 
-| 运行环境 | 运行时标识 | 4.3.2 交付产物 | 说明 |
+| 运行环境 | 运行时标识 | 4.3.3 交付产物 | 说明 |
 | --- | --- | --- | --- |
-| **Windows 桌面端 (x64)** | Tauri / WebView2 | `LumaAlbumReact-4.3.2-windows-x64.exe` | 独立桌面程序（支持应用内一键在线更新，本地构建输出至 `React/Desktop/LumaAlbumReact.exe`） |
-| **Windows Web 端 (x64)** | `windows-amd64-v1` | `web/release/luma-web.exe` / `Luma-Web-4.3.2-windows-amd64-v1.luma` | 内嵌前端的 Windows Web 服务（配合 `web/Start-Web.cmd` 启动），支持服务端直连或 `.luma` 升级 |
-| **群晖 NAS Docker (x86_64)** | `linux-amd64-v1` | `Luma-Web-4.3.2-linux-amd64-v1.luma` | 搭配 `web/compose.nas.yaml`，支持网页端一键在线更新或手动上传 `.luma` |
-| **iStoreOS / 香橙派 5 Plus (ARM64)** | `linux-arm64-v1` | `Luma-Web-4.3.2-linux-arm64-v1.luma` | 搭配 `web/compose.orangepi5plus.yaml`，支持网页端一键在线更新或手动上传 `.luma` |
+| **Windows 桌面端 (x64)** | Tauri / WebView2 | `LumaAlbumReact-4.3.3-windows-x64.exe` | 独立桌面程序（支持应用内一键在线更新，本地构建输出至 `React/Desktop/LumaAlbumReact.exe`） |
+| **Windows Web 端 (x64)** | `windows-amd64-v1` | `web/release/luma-web.exe` / `Luma-Web-4.3.3-windows-amd64-v1.luma` | 内嵌前端的 Windows Web 服务（配合 `web/Start-Web.cmd` 启动），支持服务端直连或 `.luma` 升级 |
+| **群晖 NAS Docker (x86_64)** | `linux-amd64-v1` | `Luma-Web-4.3.3-linux-amd64-v1.luma` | 搭配 `web/compose.nas.yaml`，支持网页端一键在线更新或手动上传 `.luma` |
+| **iStoreOS / 香橙派 5 Plus (ARM64)** | `linux-arm64-v1` | `Luma-Web-4.3.3-linux-arm64-v1.luma` | 搭配 `web/compose.orangepi5plus.yaml`，支持网页端一键在线更新或手动上传 `.luma` |
 
 ---
 
 ## 快速开始：部署与网页在线升级
 
-### 1. 已有 4.0.x / 4.1.x / 4.2.x / 4.3.x 环境：无损升级至 4.3.2（推荐）
+### 1. 已有 4.0.x / 4.1.x / 4.2.x / 4.3.x 环境：无损升级至 4.3.3（推荐）
 
 日常版本升级无需重新拉取或导入几百 MB 的 Docker 镜像（`4.3.2` 起支持**一键在线直连更新**，无需经电脑中转）：
 
 - **方式 A（4.3.2 及之后版本推荐：一键在线直连更新）**：打开 **偏好设置 → 应用更新 → 检查更新**，检测到新版本后直接点击 **立即在线更新**，Web 端由服务器直接从 GitHub 拉取并校验 SHA-256 后自动替换重启，Windows 桌面端自动下载校验并重启替换。
 - **方式 B（4.3.1 及更早版本首次升级，或离线内网环境：手动上传 `.luma`）**：
-  1. 从 [`web-v4.3.2` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) 下载对应平台的 `.luma` 升级包：
-     - **群晖（Intel / AMD x86_64）**：`Luma-Web-4.3.2-linux-amd64-v1.luma`
-     - **iStoreOS / 香橙派 5 Plus（ARM64）**：`Luma-Web-4.3.2-linux-arm64-v1.luma`
-     - **Windows Web（x64）**：`Luma-Web-4.3.2-windows-amd64-v1.luma`
+  1. 从 [`web-v4.3.3` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.3) 下载对应平台的 `.luma` 升级包：
+     - **群晖（Intel / AMD x86_64）**：`Luma-Web-4.3.3-linux-amd64-v1.luma`
+     - **iStoreOS / 香橙派 5 Plus（ARM64）**：`Luma-Web-4.3.3-linux-arm64-v1.luma`
+     - **Windows Web（x64）**：`Luma-Web-4.3.3-windows-amd64-v1.luma`
   2. 登录拾光网页，依次打开 **偏好设置 → 应用更新**。
   3. 选择下载好的 `.luma` 文件，点击 **准备更新**，再点击 **替换并更新**。
-  4. 服务自动重启后刷新页面即可（可在 `/health` 或设置页确认版本为 `4.3.2`）。
+  4. 服务自动重启后刷新页面即可（可在 `/health` 或设置页确认版本为 `4.3.3`）。
 
-> **数据保留说明**：`4.3.2` 升级包采用 `dataPolicy=preserve`，升级时仅替换应用前后端程序文件，**完整保留** `/data` 下已配置的相册源、索引缓存、收藏、轮播方案与保险箱数据；挂载在 `/photos` 的原始照片目录只读独立，不受应用更新影响。
+> **数据保留说明**：`4.3.3` 升级包采用 `dataPolicy=preserve`，升级时仅替换应用前后端程序文件，**完整保留** `/data` 下已配置的相册源、索引缓存、收藏、轮播方案与保险箱数据；挂载在 `/photos` 的原始照片目录只读独立，不受应用更新影响。
 
 ### 2. 全新 Docker 部署（群晖 / iStoreOS / 香橙派）
 
@@ -57,14 +57,26 @@
    docker compose -f compose.nas.yaml up -d            # 群晖 x86_64
    docker compose -f compose.orangepi5plus.yaml up -d  # 香橙派 / ARM64
    ```
-3. 启动后从 [`web-v4.3.2` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) 下载对应平台的 `.luma` 升级包，在网页端 **偏好设置 → 应用更新** 一键无损升级至 `4.3.2`；升级后即可直接用内置的 **立即在线更新**，后续版本迭代均无需重打或重拉 Docker 镜像。
+3. 启动后从 [`web-v4.3.3` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.3) 下载对应平台的 `.luma` 升级包，在网页端 **偏好设置 → 应用更新** 一键无损升级至 `4.3.3`；升级后即可直接用内置的 **立即在线更新**，后续版本迭代均无需重打或重拉 Docker 镜像。
 
 ### 3. Windows 桌面端与本机 Web 服务运行
 
-- **Windows 桌面端**：从 [`web-v4.3.2` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.2) 下载 `LumaAlbumReact-4.3.2-windows-x64.exe` 直接双击运行（需 Windows 10/11 自带 WebView2 运行时；后续可直接在 **偏好设置 → 应用更新** 点击「立即在线更新」自动替换重启）。
+- **Windows 桌面端**：从 [`web-v4.3.3` Release](https://github.com/BinaryEisley/LumaAlbum-Releases/releases/tag/web-v4.3.3) 下载 `LumaAlbumReact-4.3.3-windows-x64.exe` 直接双击运行（需 Windows 10/11 自带 WebView2 运行时；后续可直接在 **偏好设置 → 应用更新** 点击「立即在线更新」自动替换重启）。
 - **Windows 本机 Web 服务**：构建后双击 `web/Start-Web.cmd` 启动内嵌前端的 `web/release/luma-web.exe`，默认监听本机端口，后续同样支持在网页端一键在线更新或上传 `Luma-Web-*-windows-amd64-v1.luma` 自升级。
 
 > **v4 更新协议说明**：v4 采用轻量化无签名 `.luma` 包协议，更新流程无需配置公钥/私钥或额外校验版本与架构代号；在线直连更新额外校验官方 `manifest.json` 的 SHA-256 摘要，更新器保留 `LUMAUPD2` 包头、压缩分片边界与安全相对路径校验，防止异常包写出应用目录。首次从 3.x 升至 4.0.1 基线包时使用 `dataPolicy=fresh` 初始化新数据目录，4.0.2 及后续常规升级默认使用 `dataPolicy=preserve`。
+
+---
+
+## 4.3.3 更新重点（2026-11-28）
+
+本次更新聚焦**服务端与共享核心安全加固**（保留全部现有相册与保险箱数据；已在 `4.3.2` 的 Web 与桌面端可直接点「立即在线更新」一键升级）：
+
+- **反向代理 `X-Forwarded-For` 防伪造加固**：
+  - 将客户端 IP 解析升级为遍历全部同名 `X-Forwarded-For` 头并**从右向左剥离 `LUMA_TRUSTED_PROXIES` 中的可信代理 IP**，取第一个非可信客户端 IP；右侧任意跳出现畸形或非 UTF-8 值时立即 Fail-Closed 回退为底层 TCP 对端地址，彻底封堵通过伪造左侧 `X-Forwarded-For` 绕过单 IP 登录限流或刷爆限流槽位的风险。
+- **跨平台 TOCTOU 安全边界文件打开（零二次按路径重开）**：
+  - 新增 `confined::open_confined_file` 统一收口本地媒体打开：Linux/Unix 从已打开的 `root` 目录句柄按相对路径逐级 `openat(..., O_NOFOLLOW | O_CLOEXEC)`（末段附加 `O_NONBLOCK` 防止 FIFO 阻塞）原子解析，拒绝中间目录与末段符号链接；Windows 以 `FILE_FLAG_OPEN_REPARSE_POINT` 打开并拒绝重解析点，再直接对已打开句柄调用 `GetFinalPathNameByHandleW` 核验目录边界。
+  - 常规媒体流、Live Photo 伴生/嵌入式视频、纯 Rust 缩略图、HEIC/TIFF 解码（Linux 管道 stdin / Windows 句柄内存流）及 Linux `ffmpeg` 视频封面帧（`/proc/self/fd/0`）全链路直接复用该已校验句柄，彻底消除 `canonicalize` 与 `File::open` 之间的竞争窗口。
 
 ---
 
